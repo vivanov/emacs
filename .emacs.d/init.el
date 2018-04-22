@@ -17,6 +17,7 @@
 
 ;; modes
 (electric-indent-mode 0)
+(global-auto-revert-mode t)
 
 ;; global keybindings
 (global-unset-key (kbd "C-z"))
