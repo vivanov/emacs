@@ -31,7 +31,11 @@
                     ("org" . "http://orgmode.org/elpa/")
                     ("melpa" . "http://melpa.org/packages/")
                     ("melpa-stable" . "http://stable.melpa.org/packages/"))
- package-archive-priorities '(("melpa-stable" . 1)))
+ package-archive-priorities '(("melpa" . 1)))
+
+;; Enable defer and ensure by default for use-package
+(setq use-package-always-defer t
+      use-package-always-ensure t)
 
 (package-initialize)
 (when (not package-archive-contents)
@@ -55,13 +59,42 @@
   (ido-everywhere 1)
   (flx-ido-mode 1))
 (use-package idris-mode)
-(use-package ensime
-  :ensure t
-  :pin melpa)
+;(use-package ensime
+;  :ensure t
+;  :pin melpa)
 (use-package sbt-mode
-  :pin melpa)
+  :pin melpa
+  :commands sbt-start sbt-command
+  :config
+  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map))
 (use-package scala-mode
-  :pin melpa)
+  :pin melpa :mode "\\.s\\(cala\\|bt\\)$")
+
+;; Enable nice rendering of diagnostics like compile errors.
+(use-package flycheck
+  :init (global-flycheck-mode))
+
+(use-package lsp-mode)
+
+(use-package lsp-ui
+  :hook (lsp-mode . lsp-ui-mode))
+;(add-hook 'lsp-mode-hook #'lsp-ui-mode))
+;)
+;(add-hook 'lsp-mode-hook (lambda () (lsp-ui-mode)))
+(use-package lsp-scala
+  :load-path "~/projects/personal/lsp-scala"
+  :after scala-mode
+  :demand t
+  ;; Optional - enable lsp-scala automatically in scala files
+  :hook (scala-mode . lsp))
+;)
+;(add-hook 'scala-mode-hook #'lsp-mode)
+
 (use-package magit
   :commands magit-status magit-blame
   :init (setq
@@ -70,7 +103,7 @@
          ("s-b" . magit-blame))
   :pin melpa)
 (use-package git-timemachine)
-(add-hook 'git-timemachine-mode-hook (lambda () (ensime-mode 0)))
+;(add-hook 'git-timemachine-mode-hook (lambda () (ensime-mode 0)))
 (use-package git-gutter
   :config
   (custom-set-variables
@@ -95,7 +128,8 @@
  '(git-gutter:modified-sign " * ")
  '(package-selected-packages
    (quote
-    (smerge git-gutter git-timemachine flx-ido magit ensime idris-mode use-package))))
+;    (lsp-ui lsp-mode flycheck smerge git-gutter git-timemachine flx-ido magit ensime idris-mode use-package))))
+    (lsp-ui lsp-mode flycheck smerge git-gutter git-timemachine flx-ido magit idris-mode use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
