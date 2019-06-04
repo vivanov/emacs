@@ -58,6 +58,12 @@
   (ido-mode 1)
   (ido-everywhere 1)
   (flx-ido-mode 1))
+
+(add-to-list 'load-path
+              "~/.emacs.d/plugins/yasnippet")
+(require 'yasnippet)
+(yas-global-mode 1)
+
 (use-package idris-mode)
 ;(use-package ensime
 ;  :ensure t
@@ -79,21 +85,18 @@
 (use-package flycheck
   :init (global-flycheck-mode))
 
-(use-package lsp-mode)
+(use-package lsp-mode
+  :init (setq lsp-prefer-flymake nil))
 
-(use-package lsp-ui
-  :hook (lsp-mode . lsp-ui-mode))
-;(add-hook 'lsp-mode-hook #'lsp-ui-mode))
-;)
-;(add-hook 'lsp-mode-hook (lambda () (lsp-ui-mode)))
+(use-package lsp-ui)
+
+(use-package company-lsp)
+
 (use-package lsp-scala
-  :load-path "~/projects/personal/lsp-scala"
   :after scala-mode
   :demand t
   ;; Optional - enable lsp-scala automatically in scala files
   :hook (scala-mode . lsp))
-;)
-;(add-hook 'scala-mode-hook #'lsp-mode)
 
 (use-package magit
   :commands magit-status magit-blame
@@ -128,8 +131,7 @@
  '(git-gutter:modified-sign " * ")
  '(package-selected-packages
    (quote
-;    (lsp-ui lsp-mode flycheck smerge git-gutter git-timemachine flx-ido magit ensime idris-mode use-package))))
-    (lsp-ui lsp-mode flycheck smerge git-gutter git-timemachine flx-ido magit idris-mode use-package))))
+    (yasnippet lsp-ui lsp-mode flycheck smerge git-gutter git-timemachine flx-ido magit idris-mode use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
