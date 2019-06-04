@@ -131,7 +131,7 @@
  '(git-gutter:modified-sign " * ")
  '(package-selected-packages
    (quote
-    (yasnippet lsp-ui lsp-mode flycheck smerge git-gutter git-timemachine flx-ido magit idris-mode use-package))))
+    (yasnippet haskell-mode lsp-ui lsp-mode flycheck smerge git-gutter git-timemachine flx-ido magit idris-mode use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
